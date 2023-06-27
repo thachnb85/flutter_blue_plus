@@ -222,6 +222,17 @@ public class FlutterBluePlusPlugin implements
         {
             Log.d(TAG, "teardown");
 
+            for (String key : mDevices.keySet()) {
+                BluetoothDeviceCache bluetoothDeviceCache = mDevices.get(key);
+                if(bluetoothDeviceCache != null) {
+                    BluetoothGatt gattServer = bluetoothDeviceCache.gatt;
+                    if(gattServer != null) {
+                        gattServer.disconnect();
+                        gattServer.close();
+                    }
+                }
+            }
+            
             context.unregisterReceiver(mBluetoothStateReceiver);
             context = null;
 
